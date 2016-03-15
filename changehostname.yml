@@ -1,0 +1,16 @@
+---
+- hosts: webservers
+  sudo: yes
+  tasks:
+#        - name: Delete existing  Hostname
+#          lineinfile: dest=/etc/sysconfig/network1
+#                      regexp='^HOSTNAME='
+#                      state=absent
+        
+        - name: create new  Hostname
+          lineinfile: dest=/etc/sysconfig/network
+                      regexp=''
+                      insertbefore=BOF
+                      line="HOSTNAME={{ ansible_hostname}}"
+                      
+

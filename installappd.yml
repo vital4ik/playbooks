@@ -1,0 +1,7 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+        - name: Install appdynamics.
+          synchronize:  src=./AppDynamics4.1.4.0 dest=/opt/AppDynamics
+          synchronize:  src=./appdynamics dest=/etc/init.d/

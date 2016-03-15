@@ -1,0 +1,4 @@
+#keys and certs
+*.crt
+*.key
+*.cer
