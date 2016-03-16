@@ -3,5 +3,30 @@
   sudo: yes
   tasks:
         - name: Install appdynamics.
-          synchronize:  src=./AppDynamics4.1.4.0 dest=/opt/AppDynamics
-          synchronize:  src=./appdynamics dest=/etc/init.d/
+          synchronize:  src=/home/ansible/AppDynamics4.1.4.0/ dest=/opt/AppDynamics4.1.4.0 recursive=yes
+        - name: Setup Startup Script
+          synchronize:  src=/home/ansible/appdynamics dest=/etc/init.d/
+        - name: Creating SymLink for the folder
+          file: path=/opt/AppDynamics src=/opt/AppDynamics4.1.4.0/ state=link force=yes
+        - name: Changing Machine Agent configuration HOSTNAME
+          lineinfile: dest=/opt/AppDynamics/MachineAgent/conf/controller-info.xml
+                      regexp='^    <node-name>'
+                      insertbefore='^    <node-name>'
+                      line=<node-name>{{ ansible_fqdn.split('.')[0]}}</node-name>
+        - name: Changing Machine Agent configuration APP
+          lineinfile: dest=/opt/AppDynamics/MachineAgent/conf/controller-info.xml
+                      regexp='^    <application-name>'
+                      insertbefore='^    <application-name>'
+                      line='<application-name>CTR DEVCUL</application-name>'
+          when: ansible_fqdn.split('.')[1]=='dev'
+#        - name: Changing Machine Agent configuration TIER
+#          lineinfile: dest=/opt/AppDynamics/MachineAgent/conf/controller-info.xml
+#                      regexp='^    <tier-name>'
+#                      insertbefore='^    <tier-name>'
+#                      line='<node-name>CTR CUI</node-name>'
+#          when: "cuic" in  "ansible_fqdn.split('.')[0].split('ll')"
+
+
+
+        - name: Starting Appdynamics Machine Agent
+          service: name=appdynamics state=started enabled=yes

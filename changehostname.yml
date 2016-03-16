@@ -1,5 +1,5 @@
 ---
-- hosts: webservers
+- hosts: all
   sudo: yes
   tasks:
 #        - name: Delete existing  Hostname
@@ -11,6 +11,6 @@
           lineinfile: dest=/etc/sysconfig/network
                       regexp=''
                       insertbefore=BOF
-                      line="HOSTNAME={{ ansible_hostname}}"
+                      line="HOSTNAME={{ ansible_fqdn}}"
                       
 

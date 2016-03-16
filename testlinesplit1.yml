@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  sudo: yes
+  gather_facts: no
+  vars:
+        - hostname: "jbcllcuic9990.dev"
+  tasks:
+        - name: Splithostname
+          debug: var=item
+          with_items:  "hostname.split('.')[0].split('ll')"
+        

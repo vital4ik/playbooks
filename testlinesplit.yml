@@ -1,0 +1,10 @@
+---
+- hosts: all
+  sudo: yes
+  gather_facts: no
+  vars:
+        - hostname: "{{ansible_fqdn}}"
+  tasks:
+        - name: Splithostname
+          debug: var=item
+          with_items: ansible_fqdn.split('.')        
