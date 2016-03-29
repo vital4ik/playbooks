@@ -1,0 +1,28 @@
+---
+- hosts: webservers
+  vars:
+     appname: CTR DEVCUL
+     tiername: CTR CUI
+     nodename: "{{ ansible_fqdn.split('.')[0] }}"
+  tasks:
+    - block:
+        - name: Install appdynamics.
+          synchronize:  src=/home/ansible/AppDynamics4.1.4.0/ dest=/opt/AppDynamics4.1.4.0 recursive=yes
+
+        - name: Setup Startup Script
+          synchronize:  src=/home/ansible/appdynamics dest=/etc/init.d/
+
+        - name: Creating SymLink for the folder
+          file: path=/opt/AppDynamics src=/opt/AppDynamics4.1.4.0/ state=link force=yes
+
+        - name: Copy and create config
+          template:
+            src: /home/ansible/AppDynamics4.1.4.0/MachineAgent-4.1.4.0/conf/controller-info.xml.j2
+            dest: /opt/AppDynamics4.1.4.0/MachineAgent-4.1.4.0/conf/controller-info.xml
+            mode: 0644
+
+        - name: Starting Appdynamics Machine Agent
+          service: name=appdynamics state=started enabled=yes
+    
+      when: ansible_fqdn.split('.')[1]=='dev'
+      sudo: yes

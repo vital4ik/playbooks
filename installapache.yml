@@ -16,15 +16,15 @@
              group: root
              mode: 0644
           with_items:
-               - src: "./devhttpd/conf/httpd.conf" 
+               - src: "/home/ansible/devhttpd/conf/httpd.conf" 
                  dest: "/etc/httpd/conf/httpd.conf" 
-               - src: "./devhttpd/book.dev.cua.ctr.jetblue.com.cer" 
+               - src: "/home/ansible/devhttpd/book.dev.cua.ctr.jetblue.com.cer" 
                  dest: "/etc/httpd/" 
-               - src: "./devhttpd/book.dev.cua.ctr.jetblue.com.key" 
+               - src: "/home/ansible/devhttpd/book.dev.cua.ctr.jetblue.com.key" 
                  dest: "/etc/httpd/" 
-               - src: "./devhttpd/modules" 
+               - src: "/home/ansible/devhttpd/modules" 
                  dest: "/etc/httpd/" 
-               - src: "./devhttpd/conf.d" 
+               - src: "/home/ansible/devhttpd/conf.d" 
                  dest: "/etc/httpd/" 
         - name: Start Apache and at boot
           service: name=httpd state=started enabled=yes

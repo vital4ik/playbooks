@@ -1,0 +1,6 @@
+---
+- hosts: webservers
+  tasks:
+    - block:
+        - name:  this is a test
+          debug: msg="blabla"
