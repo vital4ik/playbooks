@@ -1,0 +1,30 @@
+---
+- hosts: webservers
+  sudo: yes
+  tasks:
+        - name: Install Apache.
+          yum: name={{ item  }} state=present
+          with_items:
+                - httpd
+                - httpd-devel
+                - mod_ssl
+        - name: Copy configuration files.
+          copy:
+             src: "{{ item.src }}"
+             dest: "{{ item.dest }}"
+             owner: root
+             group: root
+             mode: 0644
+          with_items:
+               - src: "/home/ansible/devhttpd/conf/httpd.conf" 
+                 dest: "/etc/httpd/conf/httpd.conf" 
+               - src: "/home/ansible/devhttpd/book.dev.cua.ctr.jetblue.com.cer" 
+                 dest: "/etc/httpd/" 
+               - src: "/home/ansible/devhttpd/book.dev.cua.ctr.jetblue.com.key" 
+                 dest: "/etc/httpd/" 
+               - src: "/home/ansible/devhttpd/modules" 
+                 dest: "/etc/httpd/" 
+               - src: "/home/ansible/devhttpd/conf.d" 
+                 dest: "/etc/httpd/" 
+        - name: Start Apache and at boot
+          service: name=httpd state=started enabled=yes

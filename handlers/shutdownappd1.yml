@@ -1,0 +1,12 @@
+---
+- hosts: webservers
+  sudo: yes
+  vars:
+     appname: CTR DEVCUL
+     tiername: CTR CUI
+     nodename: ansible_fqdn.split('.')[0]
+  tasks:
+
+        - name: stopping  Appdynamics Machine Agent
+          service: name=appdynamics state=stopped enabled=no
+    
