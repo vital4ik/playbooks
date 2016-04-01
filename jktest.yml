@@ -1,7 +1,7 @@
 ---
-- hosts: 127.0.0.1
-  connection: local
-
+- hosts: all
+  gather_facts: true
   tasks:
-     - name: check date
-       command: date
+    - name: check hostname
+      command: hostname
+    - debug: msg= 'hostname {{ ansible_nodename }}'

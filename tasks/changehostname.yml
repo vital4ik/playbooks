@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  sudo: yes
+  sudo: no
   tasks:
 #        - name: Delete existing  Hostname
 #          lineinfile: dest=/etc/sysconfig/network1

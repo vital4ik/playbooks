@@ -7,7 +7,11 @@
   tasks:
     - block:
         - name: Install appdynamics.
-          synchronize:  src=/home/ansible/AppDynamics4.1.4.0/ dest=/opt/AppDynamics4.1.4.0 recursive=yes
+          remote_user: ansible 
+          synchronize:  
+            src: /home/ansible/AppDynamics4.1.4.0/ 
+            dest: /opt/AppDynamics4.1.4.0 recursive=yes
+          delegate_to: 10.2.0.30
 
         - name: Setup Startup Script
           synchronize:  src=/home/ansible/appdynamics dest=/etc/init.d/

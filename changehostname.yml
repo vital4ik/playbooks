@@ -11,6 +11,5 @@
           lineinfile: dest=/etc/sysconfig/network
                       regexp=''
                       insertbefore=BOF
-                      line="HOSTNAME={{ ansible_fqdn}}"
-                      
+                      line="HOSTNAME={{ ansible_nodename }}"
 
