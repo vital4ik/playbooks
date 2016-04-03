@@ -1,32 +1,35 @@
 ---
 - hosts: webservers
+#  remote_user: root
   vars:
      appname: CTR DEVCUL
      tiername: CTR CUI
      nodename: "{{ ansible_nodename.split('.')[0] }}"
   tasks:
     - block:
-        - name: Install appdynamics.
-          remote_user: ansible 
-          synchronize:  
-            src: /home/ansible/AppDynamics4.1.4.0/ 
-            dest: /opt/AppDynamics4.1.4.0 recursive=yes
-          delegate_to: 10.2.0.30
+        #- name: Install appdynamics.
+       - git: repo=ssh://git@bitbucket.b6prdeng.com:443/ot/appdynamics.git 
+                 dest=/opt/AppDynamics4.1.4.0/ 
+                 accept_hostkey=yes
 
-        - name: Setup Startup Script
-          synchronize:  src=/home/ansible/appdynamics dest=/etc/init.d/
+       - name: Creating SymLink for the folder
+         file: path=/opt/AppDynamics src=/opt/AppDynamics4.1.4.0/AppDynamics4.1.4.0/ state=link force=yes
+       - name: create symlink for startup script 
+         file: path=/etc/init.d/appdynamics src=/opt/AppDynamics/appdynamics state=link force=yes
+         become: yes
+         become_method: sudo
+       - name: create logs folder
+         file: path=/opt/AppDynamics/MachineAgent/logs state=directory mode=0755
 
-        - name: Creating SymLink for the folder
-          file: path=/opt/AppDynamics src=/opt/AppDynamics4.1.4.0/ state=link force=yes
-
-        - name: Copy and create config
-          template:
-            src: /home/ansible/AppDynamics4.1.4.0/MachineAgent-4.1.4.0/conf/controller-info.xml.j2
-            dest: /opt/AppDynamics4.1.4.0/MachineAgent-4.1.4.0/conf/controller-info.xml
+#       - name: Copy and create config
+       - template:
+            src: /opt/playbooks/templates/controller-info.xml.j2
+            dest: /opt/AppDynamics/MachineAgent-4.1.4.0/conf/controller-info.xml
             mode: 0644
-
-        - name: Starting Appdynamics Machine Agent
-          service: name=appdynamics state=started enabled=yes
+#
+       - name: Starting Appdynamics Machine Agent
+         service: name=appdynamics state=started enabled=yes
+         become: yes
+         become_method: sudo
     
       when: ansible_nodename.split('.')[1]=='dev'
-      sudo: yes
